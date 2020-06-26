@@ -1,21 +1,21 @@
 import React from 'react';
-import './app.css';
+import 'semantic-ui-css/semantic.min.css'
+import { Container } from "semantic-ui-react";
 
-import ResizablePanels from './resizable_panels/resizable.panels';
+import ResizablePanels from './components/resizable.panels';
+import SideMenu from './components/side.menu';
+import MainViewport from './components/main.viewport';
+
 
 function App() {
   return (
-    <div className="App">
+    <Container fluid={true}>
       <ResizablePanels>
-          <div>
-            Menu
-          </div>
-          <div>
-            Main context
-          </div>
+          <SideMenu />
+          <MainViewport />
         </ResizablePanels>
-    </div>
+    </Container>
   );
-}
+};
 
 export default App;

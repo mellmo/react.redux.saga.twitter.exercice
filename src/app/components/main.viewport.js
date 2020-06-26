@@ -1,6 +1,6 @@
 import React from 'react';
 import Home from './home';
-import SearchResults from './search.results';
+import Tweets from '../containers/tweets.container';
 import {
 	Switch,
 	Route
@@ -11,8 +11,8 @@ const MainViewport = () => (
 		<Route exact path="/">
 			<Home />
 		</Route>
-		<Route path="/search">
-			<SearchResults />
+		<Route path="/tweets">
+			<Tweets />
 		</Route>
 	</Switch>
 );

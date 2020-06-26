@@ -10,7 +10,7 @@ const User = ({
     followers,
     onClick
 	}) => (
-  <Card onClick={onClick}>
+  <Card onClick={onClick} style={{fontSize: '10px'}}>
     <Card.Content>
    	 <Image floated='left' src={image} size='tiny' />
       <Card.Header>{title}</Card.Header>
@@ -18,10 +18,10 @@ const User = ({
         <span className='date'>Joined in {created_at}</span>
       </Card.Meta>
       <Card.Meta>
-        <a>
-        <Icon name='user' />
-        {followers} Followers
-      </a>
+        <span>
+          <Icon name='user' />
+          {followers} Followers
+        </span>
       </Card.Meta>
       <Card.Description>
         {description}

@@ -33,8 +33,7 @@ const userReducer = (state = initialState, action) => {
 			return state.map(user => {
 				if (user.id === action.userId) {
 					user.tweets = [
-						...user.tweets,
-						action.results
+						...action.results
 					];
 
 					return user;

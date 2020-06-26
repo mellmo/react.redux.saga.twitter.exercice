@@ -5,6 +5,7 @@ export const USERS_SEARCH_FAILED = 'USERS_SEARCH_FAILED';
 export const GET_TWEETS = 'GET_TWEETS';
 export const TWEET_SEARCH_SUCCEDDED = 'TWEET_SEARCH_SUCCEDDED';
 export const TWEET_SEARCH_FAILED = 'TWEET_SEARCH_FAILED';
+export const NEW_TWEET_FEED = 'NEW_TWEET_FEED';
 
 export function searchUser (user) {
 	return {

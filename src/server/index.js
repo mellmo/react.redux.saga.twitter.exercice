@@ -1,10 +1,17 @@
+/**
+ * didn't focus on the backend too much, need refactoring
+ */
+
 const express = require('express');
 const cors = require('cors');
 const Twitter = require('twitter-lite');
-const { result } = require('lodash');
+const IO = require('socket.io');
 const app = express();
 
-app.use(cors());
+app.use(cors({
+	origin: ['http://127.0.0.1:3000', 'http://127.0.0.1:9000'],
+	credentials: true,
+}));
 
 const twitterClient = new Twitter({
 	consumer_key: "dWYqynBQWh60JZiJJdH13Km06", // from Twitter.
@@ -49,7 +56,22 @@ app.get('/get_tweets', function (request, response) {
 		.catch(results => response.status(404).send(results));
 });
 
-app.listen(process.env.PORT || 9000);
+const server = require('http').createServer(app);
+let io = IO.listen(server);
+
+io.on('connection', async socket => {
+	socket.on('getUserTweets', async userId => {
+		if (socket.stream) {
+			process.nextTick(() => socket.stream.destroy());
+		}
+
+		socket.stream = twitterClient
+			.stream(`statuses/filter`, { follow: userId })
+			.on('data', tweet => socket.emit('tweet', tweet))
+	});
+});
+
+server.listen(app.get(process.env.PORT || 9000));
 
 process.on('unhandledRejection', error => {
 	console.log('unhandledRejection', error);

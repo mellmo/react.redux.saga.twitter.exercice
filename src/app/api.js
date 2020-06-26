@@ -1,3 +1,5 @@
+import io from 'socket.io-client';
+
 export const searchUsers = async user => {
 	const response = await fetch(`http://localhost:9000/search?user=${user}`);
 

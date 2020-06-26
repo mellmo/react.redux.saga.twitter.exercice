@@ -9,16 +9,11 @@ const IO = require('socket.io');
 const app = express();
 
 app.use(cors({
-	origin: ['http://127.0.0.1:3000', 'http://127.0.0.1:9000'],
+	origin: 'http://localhost:3000',
 	credentials: true,
 }));
 
-const twitterClient = new Twitter({
-	consumer_key: "dWYqynBQWh60JZiJJdH13Km06", // from Twitter.
-	consumer_secret: "htLEsKtuVlm88y5AMTCsgwNbRWdKWXIsWjJLPiVc49X1ZLSHt3", // from Twitter.
-	access_token_key: "1276238143147184129-Zt6ytC3VeHFiRcoKLVeC2z83rJIIGe",
-	access_token_secret: "lHFfQssyyKkCYNKWW2Tv2N4r1i0gN8PhpDf4k9o5Fhk82"
-});
+const twitterClient = new Twitter(require('./twitter.keys.json'));
 
 app.get('/', function (request, response) {
 	return response.send('polfeed backend');
@@ -56,22 +51,32 @@ app.get('/get_tweets', function (request, response) {
 		.catch(results => response.status(404).send(results));
 });
 
-const server = require('http').createServer(app);
-let io = IO.listen(server);
+app.listen(process.env.PORT || 9000);
 
-io.on('connection', async socket => {
-	socket.on('getUserTweets', async userId => {
-		if (socket.stream) {
-			process.nextTick(() => socket.stream.destroy());
-		}
+// const http = require('http').Server(app);
+// let io = IO(http, {
+// 	handlePreflightRequest: (req, res) => {
+// 		const headers = {
+// 			"Access-Control-Allow-Headers": "Content-Type, Authorization",
+// 			"Access-Control-Allow-Origin": 'http://localhost:3000',
+// 			"Access-Control-Allow-Credentials": true
+// 		};
+// 		res.writeHead(200, headers);
+// 		res.end();
+// 	}
+// });
 
-		socket.stream = twitterClient
-			.stream(`statuses/filter`, { follow: userId })
-			.on('data', tweet => socket.emit('tweet', tweet))
-	});
-});
+// io.on('connection', async socket => {
+// 	socket.on('getUserTweets', async userId => {
+// 		if (socket.stream) {
+// 			process.nextTick(() => socket.stream.destroy());
+// 		}
 
-server.listen(app.get(process.env.PORT || 9000));
+// 		socket.stream = twitterClient
+// 			.stream(`statuses/filter`, { follow: userId })
+// 			.on('data', tweet => socket.emit('tweet', tweet))
+// 	});
+// });
 
 process.on('unhandledRejection', error => {
 	console.log('unhandledRejection', error);

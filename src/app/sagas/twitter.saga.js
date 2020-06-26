@@ -17,10 +17,10 @@ import {
 	searchUsers,
 	getUserTweets
 } from '../api';
-import { eventChannel } from 'redux-saga';
-import io from 'socket.io-client';
+// import { eventChannel } from 'redux-saga';
+// import io from 'socket.io-client';
 
-const socket = io('http://127.0.0.1:9000');
+// const socket = io('http://127.0.0.1:9000');
 
 function* searchUser(action) {
 	try {
@@ -51,35 +51,35 @@ function* watchTweetFetch() {
 }
 
 
-async function createEventChannel (socket) {
+// async function createEventChannel (socket) {
 
-	return eventChannel(emit => {
-		socket.on('tweet', emit);
+// 	return eventChannel(emit => {
+// 		socket.on('tweet', emit);
 
-		return () => socket.close();
-	})
-}
+// 		return () => socket.close();
+// 	})
+// }
 
-function* subscribeToUserStream(action) {
-	const channel = yield call(createEventChannel, socket);
+// function* subscribeToUserStream(action) {
+// 	const channel = yield call(createEventChannel, socket);
 
-	socket.emit('getUserTweets', action.userId);
-	socket.on('tweet', console.log)
-	// while (true) {
-	// 	const { message } = yield take(channel);
-	// 	yield put({ type: NEW_TWEET_FEED, message})
-	// }
-}
+// 	socket.emit('getUserTweets', action.userId);
+// 	socket.on('tweet', console.log)
+// 	// while (true) {
+// 	// 	const { message } = yield take(channel);
+// 	// 	yield put({ type: NEW_TWEET_FEED, message})
+// 	// }
+// }
 
-function* getUserTweetStream() {
-	yield takeLatest(TWEET_SEARCH_SUCCEDDED, subscribeToUserStream);
-}
+// function* getUserTweetStream() {
+// 	yield takeLatest(TWEET_SEARCH_SUCCEDDED, subscribeToUserStream);
+// }
 
 function* TwitterSaga() {
 	yield all([
 		watchUserSearch(),
 		watchTweetFetch(),
-		getUserTweetStream()
+		// getUserTweetStream()
 	]);
 }
 
